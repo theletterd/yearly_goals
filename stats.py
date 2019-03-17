@@ -1,17 +1,24 @@
+from datetime import date
 import json
 import pprint
 import requests
 
 from secret import TRELLO_KEY
 from secret import TRELLO_TOKEN
+from secret import GOAL_LISTS
 
 
-goals_lists = {
-    2019: "5c26fc0ae7850e0a2d6957aa",
-    2018: "5a2c84deeb730b2c9c39b7ce",
-    2017: "586189b1841687618588f644",
-    2016: "568572f8023086e7ced9ea5e",
-}
+PROGRESS_STATES = [
+    (0, "Abysmal"),
+    (1, "Comically behind"),
+    (25, "Very behind"),
+    (50, "Behind"),
+    (60, "A Bit Behind"),
+    (75, "Doing OK"),
+    (90, "On Track"),
+    (100, "Ahead of the game"),
+]
+
 
 BASE_LIST_URL = "https://api.trello.com/1/lists/{goals_list_id}/cards"
 
@@ -27,24 +34,47 @@ list_filter_params = {
     "fields": ",".join(["name", "desc", "badges","idAttachmentCover"])
 }
 
+def get_status(percentage):
+    final_status = ""
+    for base_percentage, status in PROGRESS_STATES:
+        if percentage >= base_percentage:
+            final_status = status
+    return final_status
+
 
 def get_url_for_year(year):
-    list_id = goals_lists.get(year)
+    list_id = GOAL_LISTS.get(year)
     if not list_id:
         raise Exception
     return BASE_LIST_URL.format(goals_list_id=list_id)
 
 
 def get_attachment_urls(attachment_info):
+    """Given a list of dict(card_id: "", attachment_id:""), return a dict mapping card_id -> card_url"""
     routes = [
-        BASE_ATTACHMENT_ROUTE.format(card_id=data["card_id"], attachment_id=data["attachment_id"]) for data in attachment_info
+        BASE_ATTACHMENT_ROUTE.format(
+            card_id=data["card_id"],
+            attachment_id=data["attachment_id"]) for data in attachment_info
     ]
-    print(routes)
-    response = requests.get(BASE_BATCH_URL, params={**base_params})
-    #print(response.json()["url"])
+    batch_params = {"urls": ",".join(routes)}
+    response = requests.get(BASE_BATCH_URL, params={**base_params, **batch_params})
+
+    # map of attachment_id -> url
+    attachment_urls = {
+        attachment["200"]["id"]: attachment["200"]["url"]
+        for attachment in response.json()
+    }
+
+    card_id_to_attachment_url = {
+        attachment_dict["card_id"]: attachment_urls[attachment_dict["attachment_id"]]
+        for attachment_dict in attachment_info
+    }
+    
+    return card_id_to_attachment_url
 
     
 def get_yearly_stats(year):
+    """Collate the stats for a particular year"""
     result = requests.get(get_url_for_year(year), params={**base_params, **list_filter_params})
 
     total_checked = 0
@@ -53,6 +83,10 @@ def get_yearly_stats(year):
     attachment_info = []
 
     stats = []
+    today = date.today()
+    day_of_year = today.timetuple().tm_yday
+    current_year = today.year
+    year_completion = (100 * day_of_year) / 365 # close enough
     
 
     for goal in result.json():
@@ -64,37 +98,42 @@ def get_yearly_stats(year):
 
         card_id = goal["id"]
         attachment_id = goal["idAttachmentCover"]
+        goal_completion = (100.0 * items_checked / items_in_list)
+        tracking_percentage = (100.0 * goal_completion / year_completion)
 
         stats.append({
             "name": goal["name"],
-            "completion": (100.0 * items_checked / items_in_list),
-            "card_id": card_id
+            "desc": goal["desc"],
+            "goal_completion": goal_completion,
+            "card_id": card_id,
+            "tracking_percentage": tracking_percentage,
+            "goal_status": get_status(tracking_percentage)
         })
 
         attachment_info.append({"card_id": card_id, "attachment_id": attachment_id})
         
-    get_attachment_urls(attachment_info)
+    stats.sort(key=lambda x: x["goal_completion"], reverse=True)
+    card_id_to_attachment_url = get_attachment_urls(attachment_info)
+    for goal_info in stats:
+        goal_info["cover_url"] = card_id_to_attachment_url[goal_info["card_id"]]
 
-    stats.sort(key=lambda x: x["completion"], reverse=True)
-
+    overall_completion = (100.0 * total_checked / total_items)
+    tracking_percentage = (100.0 * overall_completion / year_completion)
+    
     year_stats = {
         "year": year,
-        "overall_completion": (100.0 * total_checked / total_items),
+        "overall_completion": overall_completion,
         "goal_completion": stats,
+        "year_completion": year_completion,
+        "tracking_percentage": tracking_percentage,
+        "status": get_status(tracking_percentage)
     }
 
+    if current_year > year:
+        year_stats["year_completion"] = 100.0
+    
     pprint.pprint(year_stats)
 
 
 
 get_yearly_stats(2019)
-
-
-"""
-Year
-status
-breakdown
-
-
-"""
-
