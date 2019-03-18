@@ -1,0 +1,6 @@
+TRELLO_KEY = ""
+TRELLO_TOKEN = ""
+
+TRELLO_GOAL_LISTS = {
+    2019: "",
+}
