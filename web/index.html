@@ -1,108 +1,111 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <title>Add React in One Minute</title>
+      <meta charset="UTF-8" />
+      <link rel="stylesheet" type="text/css" href="./style.css">
+    <title>Duncan's Goals</title>
   </head>
   <body>
-
-    <h2>Add React in One Minute</h2>
-    <p>This page demonstrates using React with no build tooling.</p>
-    <p>React is loaded as a script tag.</p>
-
-    <!-- We will put our React component inside this div. -->
-    <div id="like_button_container"></div>
-    <div id="yearlyGoals"></div>
-
-    <!-- Load React. -->
-    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-
-    <!-- Load our React component. -->
-    <script type="text/babel">
-
-      class Goals extends React.Component {
-        constructor(props) {
-          super(props);
-          this.state = {goals: props.goals};
-        }
-        render() {
-          const goalElements = this.state.goals.map((goal) =>
-            <Goal goal={goal} key={goal.card_id}/>
-          );
-	  
-	  return (goalElements);
-        }
       
-      }
+      <div class="header">Duncan's Goals</div>
+      <p>wtf am I doing</p>
       
-
-      class Goal extends React.Component {
-        constructor(props) {
-          super(props);
-          this.state = {
-            name: props.goal.name,
-            status: props.goal.goal_status,
-            goal_completion: props.goal.goal_completion,
-            images: props.goal.cover_url
-          }
-        }
+      <div id="yearlyGoals"></div>
       
-        render() {
-          return (
-            <div className="goal">
-	      <div>{this.state.name}</div>
-	      <div>{this.state.status}</div>
-	    </div>
-          );
-        }
-      }
-
-      class Year extends React.Component {
-          constructor(props) {
-            super(props);
-            this.state = {year: props.year}
-      }
-          render() {
-            return (<div className="year">{this.state.year}</div>);
-          }
-      }
-
-      class YearlyGoals extends React.Component {
-          constructor(props) {
-            super(props);
-            this.state = {};
-          }
-
-      componentDidMount() {
-        fetch("http://0.0.0.0:5000/2019")
-        .then(response => response.json())
-        .then(data => {this.setState(data)});
-
-      }
-
-      render() {
-          if (this.state.year !== undefined) {
-            return (
-              <div>
-		<Year year={this.state.year} />
-		<Goals goals={this.state.goal_completion} />
-              <div>balls balls balls</div>
-	      </div>
-      );
-          } else {return null;}
-         }
-      }
-
+      <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+      <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+      <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+      <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
       
-      ReactDOM.render(
-        <YearlyGoals />,
-        document.getElementById('yearlyGoals')
-      );
+      <!-- Load our React component. -->
+      <script type="text/babel">
+       
+       class Goals extends React.Component {
+	   constructor(props) {
+	       super(props);
+               this.state = {goals: props.goals};
+           }
+           render() {
+               const goalElements = this.state.goals.map((goal) =>
+		   <Goal goal={goal} key={goal.card_id}/>
+               );
+	       return (
+		   <div className="goals">
+		       {goalElements}
+		   </div>
+	       );
+           }
+       }
+     
+     
+       class Goal extends React.Component {
+           constructor(props) {
+               super(props);
+               this.state = {
+		   name: props.goal.name,
+		   status: props.goal.goal_status,
+		   goal_completion: props.goal.goal_completion,
+		   image_url: props.goal.cover_url
+               }
+           }
+	   
+           render() {
+               return (
+		   <div className="goal">
+		       <div class="goal-image">
+			   <img src={this.state.image_url} />
+		       </div>
+		       <div class="goal-state">
+			   <div class="goal-name">{this.state.name}</div>
+			   <div class="goal-status">{this.state.status}</div>
+		       </div>
+		   </div>
+               );
+           }
+       }
+       
+       class Year extends React.Component {
+           constructor(props) {
+               super(props);
+               this.state = {year: props.year}
+	   }
+           render() {
+               return (<div className="year">{this.state.year}</div>);
+           }
+       }
+       
+       class YearlyGoals extends React.Component {
+           constructor(props) {
+               super(props);
+               this.state = {};
+           }
+	   
+	   componentDidMount() {
+               fetch("http://0.0.0.0:5000/2019")
+		   .then(response => response.json())
+		   .then(data => {this.setState(data)});
+	   }
+	 
+	   render() {
+               if (this.state.year !== undefined) {
+		   return (
+		       <div>
+			   <Year year={this.state.year} />
+			   <Goals goals={this.state.goal_completion} />
+			   <div>balls balls balls</div>
+		       </div>
+		   );
+	       } else {return null;}
+           }
+       }
+       
+     
+       ReactDOM.render(
+           <YearlyGoals />,
+           document.getElementById('yearlyGoals')
+       );
 
-    </script>
-
+      </script>
+      
   </body>
 </html>
