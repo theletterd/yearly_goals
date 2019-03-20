@@ -61,11 +61,25 @@ body {
 	
 }
 
+.goal {
+    background-color: #1e1e33;
+    font-size: 30px;
+    color: #ab99b9;
+    padding: 10px;
+}
 
+.goal-state {
+    display: inline-block;
+}
 
- img {
+.goal-image {
+    display: inline-block;
+    padding-right: 30px;
+    paddig-left: 10px;
+}
+.goal-image img {
      object-fit: cover;
-     width: 200px;
-     height: 200px;
-     border-radius: 50% ;
+     width: 180px;
+     height: 180px;
+     border-radius: 50%;
 }

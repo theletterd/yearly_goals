@@ -22,6 +22,11 @@ list_filter_params = {
 
 
 class Trello(object):
+    
+    @staticmethod
+    def get_available_years():
+        return sorted(list(TRELLO_GOAL_LISTS.keys()), reverse=True)
+    
     @staticmethod
     def _get_url_for_year(year):
         list_id = TRELLO_GOAL_LISTS.get(year)
@@ -107,7 +112,7 @@ class Trello(object):
         year_stats = {
             "year": year,
             "overall_completion": overall_completion,
-            "goal_completion": stats,
+            "goals": stats,
             "year_completion": year_completion,
             "tracking_percentage": tracking_percentage,
             "status": get_status_from_percentage(tracking_percentage)

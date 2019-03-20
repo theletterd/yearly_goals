@@ -8,9 +8,7 @@
   <body>
       
       <div class="header">Duncan's Goals</div>
-      <p>wtf am I doing</p>
-      
-      <div id="yearlyGoals"></div>
+      <div id="main"></div>
       
       <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
       <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
@@ -23,10 +21,9 @@
        class Goals extends React.Component {
 	   constructor(props) {
 	       super(props);
-               this.state = {goals: props.goals};
            }
            render() {
-               const goalElements = this.state.goals.map((goal) =>
+               const goalElements = this.props.goals.map((goal) =>
 		   <Goal goal={goal} key={goal.card_id}/>
                );
 	       return (
@@ -41,68 +38,116 @@
        class Goal extends React.Component {
            constructor(props) {
                super(props);
-               this.state = {
-		   name: props.goal.name,
-		   status: props.goal.goal_status,
-		   goal_completion: props.goal.goal_completion,
-		   image_url: props.goal.cover_url
-               }
            }
 	   
            render() {
                return (
 		   <div className="goal">
-		       <div class="goal-image">
-			   <img src={this.state.image_url} />
+		       <div className="goal-image">
+			   <img src={this.props.goal.cover_url} />
 		       </div>
-		       <div class="goal-state">
-			   <div class="goal-name">{this.state.name}</div>
-			   <div class="goal-status">{this.state.status}</div>
+		       <div className="goal-state">
+			   <div className="goal-name">{this.props.goal.name}</div>
+			   <div className="goal-status">{this.props.goal.goal_status}</div>
 		       </div>
 		   </div>
                );
            }
        }
        
-       class Year extends React.Component {
-           constructor(props) {
-               super(props);
-               this.state = {year: props.year}
-	   }
-           render() {
-               return (<div className="year">{this.state.year}</div>);
-           }
-       }
-       
        class YearlyGoals extends React.Component {
            constructor(props) {
                super(props);
-               this.state = {};
            }
 	   
-	   componentDidMount() {
-               fetch("http://0.0.0.0:5000/2019")
-		   .then(response => response.json())
-		   .then(data => {this.setState(data)});
-	   }
-	 
 	   render() {
-               if (this.state.year !== undefined) {
+               if (this.props.yearlyGoals !== null) {
 		   return (
-		       <div>
-			   <Year year={this.state.year} />
-			   <Goals goals={this.state.goal_completion} />
-			   <div>balls balls balls</div>
+		       <div id="yearlyGoals">
+			   <Goals goals={this.props.yearlyGoals.goals} />
 		       </div>
 		   );
 	       } else {return null;}
+	   }
+       }
+
+       class Year extends React.Component {
+           constructor(props) {
+               super(props);
+	       this.handleClick = this.handleClick.bind(this);
+	   }
+
+	   handleClick() {
+	       this.props.handleYearChange(this.props.year);
+	   }
+	   
+           render() {
+               return (<div className="year" onClick={this.handleClick}>{this.props.year}</div>);
            }
        }
-       
-     
+
+       class Years extends React.Component {
+	   constructor(props) {
+	       super(props);
+	       this.state = {};
+	   }
+	   
+	   componentDidMount() {
+	       fetch("http://0.0.0.0:5000/years")
+		   .then(response => response.json())
+		   .then(years => this.setState({years: years}));
+	   }
+
+	   render() {
+	       if (this.state.years === undefined) {
+		   return null;
+	       }
+	       const yearElements = this.state.years.map(year =>
+		   <Year year={year} key={year}  handleYearChange={this.props.handleYearChange} />
+	       );
+
+	       return (
+		   <div id="yearSelector">
+		       {yearElements}
+		   </div>
+	       );
+	       
+	   }
+       }
+
+       class Controller extends React.Component {
+	   constructor(props) {
+	       super(props);
+
+	       this.handleYearChange = this.handleYearChange.bind(this);
+	       this.state = {year: null, yearlyGoals: null};
+	   }
+
+	   handleYearChange(year) {
+               fetch("http://0.0.0.0:5000/year/" + year)
+		   .then(response => response.json())
+		   .then(data => {
+		       this.setState({year: year, yearlyGoals:data});
+		   });
+	   }
+	   
+	   render() {
+	       return (
+		   <div>
+		       <Years handleYearChange={this.handleYearChange}/>
+		       <YearlyGoals yearlyGoals={this.state.yearlyGoals}/>
+		   </div>
+	       )
+	   }
+       }
+
+
+       // Ok so what we want is whe someone clicks a Year, we set the state
+       // up in the Controller, which does the fetch, and then passes the goals down
+       // to the Yearly Goals.
        ReactDOM.render(
-           <YearlyGoals />,
-           document.getElementById('yearlyGoals')
+           <Controller />,
+           document.getElementById('main')
        );
 
       </script>

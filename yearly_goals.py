@@ -52,16 +52,30 @@ def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_t
         return update_wrapper(wrapped_function, f)
     return decorator
 
+stats = {}
+
 @app.route("/")
 @crossdomain(origin='*')
 def current_year():
     current_year = datetime.date.today().year
-    return jsonify(Trello.get_yearly_stats(current_year))
+    if current_year not in stats:
+        print(f"Stats for {current_year} not found, hitting API")
+        stats[current_year] = Trello.get_yearly_stats(current_year)
+    return jsonify(stats[current_year])
 
-@app.route("/<year>")
+@app.route("/year/<year>")
 @crossdomain(origin='*')
 def year(year):
-    return jsonify(Trello.get_yearly_stats(int(year)))
+    year = int(year)
+    if year not in stats:
+        print(f"Stats for {year} not found, hitting API")
+        stats[year] = Trello.get_yearly_stats(year)
+    return jsonify(stats[year])
+
+@app.route("/years")
+@crossdomain(origin='*')
+def available_years():
+    return jsonify(Trello.get_available_years())
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
