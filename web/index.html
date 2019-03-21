@@ -6,9 +6,10 @@
     <title>Duncan's Goals</title>
   </head>
   <body>
-      
-      <div class="header">Duncan's Goals</div>
-      <div id="main"></div>
+      <div class="header ">Duncan's Goals</div>
+      <div>
+	  <div id="main"></div>
+      </div>
       
       <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
       <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
@@ -48,7 +49,10 @@
 		       </div>
 		       <div className="goal-state">
 			   <div className="goal-name">{this.props.goal.name}</div>
+			   <div className="goal-desc">{this.props.goal.desc}</div>
 			   <div className="goal-status">{this.props.goal.goal_status}</div>
+			   <div className="goal-completion">{this.props.goal.goal_completion}</div>
+			   <div className="goal-tracking">{this.props.goal.tracking_percentage}</div>
 		       </div>
 		   </div>
                );
@@ -82,7 +86,12 @@
 	   }
 	   
            render() {
-               return (<div className="year" onClick={this.handleClick}>{this.props.year}</div>);
+	       var classNames = "year";
+	       if (this.props.year === this.props.currentYear) {
+		   classNames = classNames.concat(" selected");
+	       }
+	       var selected = this.props.year === this.props.currentYear;
+               return (<div className={classNames} onClick={this.handleClick}>{this.props.year}</div>);
            }
        }
 
@@ -103,7 +112,7 @@
 		   return null;
 	       }
 	       const yearElements = this.state.years.map(year =>
-		   <Year year={year} key={year}  handleYearChange={this.props.handleYearChange} />
+		   <Year currentYear={this.props.currentYear} year={year} key={year}  handleYearChange={this.props.handleYearChange} />
 	       );
 
 	       return (
@@ -134,7 +143,7 @@
 	   render() {
 	       return (
 		   <div>
-		       <Years handleYearChange={this.handleYearChange}/>
+		       <Years currentYear={this.state.year} handleYearChange={this.handleYearChange}/>
 		       <YearlyGoals yearlyGoals={this.state.yearlyGoals}/>
 		   </div>
 	       )
