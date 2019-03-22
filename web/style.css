@@ -106,3 +106,21 @@ body {
 #yearlyGoals {
     background-color: #1e1e33;
 }
+
+
+.goal-name {
+    font-size: 40px;
+    color: #f5feff;
+    font-weight: bold;
+}
+
+.goal-status {
+    font-size: 25px;
+    color: #f6f6f6;
+    margin-top: -10px;
+}
+
+.goal-state .progress {
+    height: 6px;
+    background-color: #e9ecef1a;
+}
