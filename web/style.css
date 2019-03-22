@@ -62,7 +62,6 @@ body {
 }
 
 .goal {
-    background-color: #1e1e33;
     font-size: 30px;
     color: #ab99b9;
     padding: 10px;
@@ -75,7 +74,7 @@ body {
 .goal-image {
     display: inline-block;
     padding-right: 30px;
-    paddig-left: 10px;
+    padding-left: 10px;
 }
 .goal-image img {
      object-fit: cover;
@@ -86,12 +85,9 @@ body {
 
 
 #yearSelector {
-    width: 180px;
     font-size: 45px;
     background-color: #333;
-    height: 100%;
-    position: fixed;
-    padding-top: 5px;
+    width: 180px;
 }
 
 #yearSelector .year {
@@ -108,6 +104,5 @@ body {
 
 
 #yearlyGoals {
-    width: 100%;
-    margin-left: 180px;
+    background-color: #1e1e33;
 }
