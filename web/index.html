@@ -42,8 +42,17 @@
 	   
 	   render() {
 	       var progress = Math.min(100, Number(this.props.goal.goal_completion));
+	       progress = Math.max(progress, 2);
 	       var style = {};
 	       if (progress > 0) {style = {width: String(progress) + "%"};}
+	       var progressState = "progress-poor";
+	       if (this.props.goal.tracking_percentage > 60) {
+		   progressState = "progress-ok";
+	       }
+	       if (this.props.goal.tracking_percentage > 80) {
+		   progressState = "progress-good";
+	       }
+	       progressState = progressState.concat(" progress-bar");
                return (
 		   <div className="goal row">
 		       <div className="goal-image">
@@ -53,10 +62,10 @@
 			   <div className="goal-name">{this.props.goal.name}</div>
 			   <div className="goal-desc">{this.props.goal.desc}</div>
 			   <div className="goal-status">{this.props.goal.goal_status}</div>
-			   <div className="goal-completion">{this.props.goal.goal_completion}</div>
-			   <div className="goal-tracking">{this.props.goal.tracking_percentage}</div>
+			   <div className="goal-completion">{Math.round(this.props.goal.goal_completion)}%</div>
+
 			   <div className="progress">
-			       <div className="progress-bar" role="progressbar" style={style} aria-valuenow="{progress}" aria-valuemin="0" aria-valuemax="100"></div>
+			       <div className={progressState} role="progressbar" style={style} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
 			   </div>
 		       </div>
 		   </div>

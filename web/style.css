@@ -117,10 +117,30 @@ body {
 .goal-status {
     font-size: 25px;
     color: #f6f6f6;
-    margin-top: -10px;
+    margin-top: -10px
 }
 
 .goal-state .progress {
     height: 6px;
     background-color: #e9ecef1a;
+}
+
+.goal-completion {
+    font-size: 50px;
+    margin-top: -10px;
+}
+
+
+    
+.goal-state .progress .progress-good {
+    background-color: #45ce45;
+}
+
+.goal-state .progress .progress-poor {
+    background-color: #ea3b3b;
+}
+
+.goal-state .progress .progress-ok {
+    background-color: #ff9900;
+
 }
