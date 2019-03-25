@@ -114,6 +114,11 @@ body {
 }
 
 
+.goals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 .goal-name {
     font-size: 40px;
     color: #f5feff;
