@@ -48,8 +48,13 @@ table {
 }
 
 
+html {
+    height: 100%;
+}
+
 body {
-    font-family: Arial, Helvetica, sans-serif	
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100%;
 }
 
 .header {
@@ -88,6 +93,7 @@ body {
     font-size: 45px;
     background-color: #333;
     width: 180px;
+    height: 100%;
 }
 
 #yearSelector .year {
@@ -143,4 +149,9 @@ body {
 .goal-state .progress .progress-ok {
     background-color: #ff9900;
 
+}
+
+
+#controller-pane {
+    height: 100%;
 }

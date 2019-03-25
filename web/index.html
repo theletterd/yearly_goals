@@ -88,6 +88,11 @@
 	       } else {return null;}
 	   }
        }
+       
+       // maybe could use this to keep the overview of yearly stats?
+       class YearStats extends React.Component {
+	   
+       }
 
        class Year extends React.Component {
            constructor(props) {
@@ -150,13 +155,13 @@
                fetch("http://0.0.0.0:5000/year/" + year)
 		   .then(response => response.json())
 		   .then(data => {
-		       this.setState({year: year, yearlyGoals:data});
+		       this.setState({year: year, yearlyGoals: data});
 		   });
 	   }
 	   
 	   render() {
 	       return (
-		   <div className="row">
+		   <div className="row" id="controller-pane">
 		       <Years currentYear={this.state.year} handleYearChange={this.handleYearChange}/>
 		       <YearlyGoals yearlyGoals={this.state.yearlyGoals}/>
 		   </div>
