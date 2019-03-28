@@ -133,7 +133,7 @@
 	   }
 	   
 	   componentDidMount() {
-	       fetch("http://0.0.0.0:5000/years")
+	       fetch("./years")
 		   .then(response => response.json())
 		   .then(years => this.setState({years: years}));
 	   }
@@ -164,7 +164,7 @@
 	   }
 
 	   handleYearChange(year) {
-               fetch("http://0.0.0.0:5000/year/" + year)
+               fetch("./year/" + year)
 		   .then(response => response.json())
 		   .then(data => {
 		       this.setState({year: year, yearlyGoals: data});
