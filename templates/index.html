@@ -84,7 +84,11 @@
 			   <Goals goals={this.props.yearlyGoals.goals} />
 		       </div>
 		   );
-	       } else {return null;}
+	       } else {
+		   return (
+		       <div id="yearlyGoals" className="col"></div>
+		   );
+	       }
 	   }
        }
        
