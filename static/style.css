@@ -62,7 +62,7 @@ body {
     font-size: 55px;
     color: #c3c3c3;
     vertical-align: middle;
-    padding: 30px;
+    padding: 17px 30px;
 	
 }
 
@@ -70,6 +70,8 @@ body {
     font-size: 30px;
     color: #ab99b9;
     padding: 10px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
 }
 
 .goal-state {
@@ -117,6 +119,7 @@ body {
 
 #yearlyGoals {
     background-color: #1e1e33;
+    padding-top: 10px;
 }
 
 
