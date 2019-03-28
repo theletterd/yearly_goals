@@ -2,6 +2,7 @@ import datetime
 
 from flask import Flask
 from flask import jsonify
+from flask import render_template
 
 from trello import Trello
 
@@ -56,12 +57,8 @@ stats = {}
 
 @app.route("/")
 @crossdomain(origin='*')
-def current_year():
-    current_year = datetime.date.today().year
-    if current_year not in stats:
-        print(f"Stats for {current_year} not found, hitting API")
-        stats[current_year] = Trello.get_yearly_stats(current_year)
-    return jsonify(stats[current_year])
+def root():
+    return render_template('index.html')
 
 @app.route("/year/<year>")
 @crossdomain(origin='*')

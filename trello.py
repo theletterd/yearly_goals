@@ -48,7 +48,7 @@ class Trello(object):
 
         # map of attachment_id -> url
         attachment_urls = {
-            attachment["200"]["id"]: attachment["200"]["previews"][4]["url"]
+            attachment["200"]["id"]: attachment["200"]["previews"][3]["url"]
             for attachment in response.json()
         }
 

@@ -2,8 +2,8 @@
 <html>
   <head>
       <meta charset="UTF-8" />
-      <link rel="stylesheet" type="text/css" href="./style.css">
-      <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="./static/style.css">
+      <link rel="stylesheet" type="text/css" href="./static/bootstrap.min.css">
     <title>Duncan's Goals</title>
   </head>
   <body>
@@ -91,7 +91,15 @@
        
        // maybe could use this to keep the overview of yearly stats?
        class YearStats extends React.Component {
-	   
+	   constructor(props) {
+	       super(props);
+	   }
+
+	   render() {
+	       return (
+		   <div class="overall-percentage">{this.props.percent}</div>
+	       );
+	   }
        }
 
        class Year extends React.Component {
@@ -110,7 +118,11 @@
 		   classNames = classNames.concat(" selected");
 	       }
 	       var selected = this.props.year === this.props.currentYear;
-               return (<div className={classNames} onClick={this.handleClick}>{this.props.year}</div>);
+               return (
+		   <div>
+		       <div className={classNames} onClick={this.handleClick}>{this.props.year}</div>
+		   </div>
+	       );
            }
        }
 
