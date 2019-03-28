@@ -60,7 +60,6 @@
 		       </div>
 		       <div className="goal-state col">
 			   <div className="goal-name">{this.props.goal.name}</div>
-			   <div className="goal-desc">{this.props.goal.desc}</div>
 			   <div className="goal-status">{this.props.goal.goal_status}</div>
 			   <div className="goal-completion">{Math.round(this.props.goal.goal_completion)}%</div>
 
@@ -89,7 +88,6 @@
 	   }
        }
        
-       // maybe could use this to keep the overview of yearly stats?
        class YearStats extends React.Component {
 	   constructor(props) {
 	       super(props);
@@ -97,7 +95,7 @@
 
 	   render() {
 	       return (
-		   <div class="overall-percentage">{this.props.percent}</div>
+		   <div className="overall-percentage">{this.props.completion}%</div>
 	       );
 	   }
        }
@@ -114,13 +112,17 @@
 	   
            render() {
 	       var classNames = "year";
+	       var completion = null;
 	       if (this.props.year === this.props.currentYear) {
 		   classNames = classNames.concat(" selected");
+		   completion = this.props.currentYearCompletion;
 	       }
 	       var selected = this.props.year === this.props.currentYear;
+
                return (
-		   <div>
-		       <div className={classNames} onClick={this.handleClick}>{this.props.year}</div>
+		   <div className={classNames}>
+		       <div onClick={this.handleClick}>{this.props.year}</div>
+		       <YearStats completion={completion}/>
 		   </div>
 	       );
            }
@@ -143,7 +145,7 @@
 		   return null;
 	       }
 	       const yearElements = this.state.years.map(year =>
-		   <Year currentYear={this.props.currentYear} year={year} key={year}  handleYearChange={this.props.handleYearChange} />
+		   <Year currentYear={this.props.currentYear} currentYearCompletion={this.props.currentYearCompletion} year={year} key={year}  handleYearChange={this.props.handleYearChange} />
 	       );
 
 	       return (
@@ -172,9 +174,13 @@
 	   }
 	   
 	   render() {
+	       var completion = 0;
+	       if (this.state.yearlyGoals !== null) {
+		   completion = Math.round(this.state.yearlyGoals.overall_completion);
+	       }
 	       return (
 		   <div className="row" id="controller-pane">
-		       <Years currentYear={this.state.year} handleYearChange={this.handleYearChange}/>
+		       <Years currentYear={this.state.year} currentYearCompletion={completion} handleYearChange={this.handleYearChange}/>
 		       <YearlyGoals yearlyGoals={this.state.yearlyGoals}/>
 		   </div>
 	       )

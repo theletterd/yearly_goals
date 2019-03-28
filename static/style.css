@@ -108,6 +108,12 @@ body {
     color: #dbdefd;
 }
 
+#yearSelector .year.selected .overall-percentage {
+    display: block;
+}
+
+
+
 
 #yearlyGoals {
     background-color: #1e1e33;
@@ -159,4 +165,13 @@ body {
 
 #controller-pane {
     height: 100%;
+}
+
+.overall-percentage {
+    color: #f90;
+    text-align: center;
+    margin-top: -15px;
+    margin-bottom: -10px;
+    font-size: 31px;
+    display: none;
 }
