@@ -182,3 +182,11 @@ body {
     font-size: 31px;
     display: none;
 }
+
+.goal-desc {
+    font-size: 22px;
+    margin-top: -6px;
+    margin-bottom: 5px;
+    color: #81e481;
+    font-weight: lighter;
+}
