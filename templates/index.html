@@ -7,9 +7,7 @@
     <title>Duncan's Goals</title>
   </head>
   <body>
-      <div class="header">Duncan's Goals</div>
-      <div id="main" class="container-fluid h-100"></div>
-      
+      <div id="root"></div>
       <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
       <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
       <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
@@ -81,13 +79,13 @@
 	   render() {
                if (this.props.yearlyGoals !== null) {
 		   return (
-		       <div id="yearlyGoals" className="col">
+		       <div className="yearlyGoals col">
 			   <Goals goals={this.props.yearlyGoals.goals} />
 		       </div>
 		   );
 	       } else {
 		   return (
-		       <div id="yearlyGoals" className="col"></div>
+		       <div className="yearlyGoals col"></div>
 		   );
 	       }
 	   }
@@ -154,7 +152,7 @@
 	       );
 
 	       return (
-		   <div id="yearSelector">
+		   <div className="sidebar">
 		       {yearElements}
 		   </div>
 	       );
@@ -184,7 +182,8 @@
 		   completion = Math.round(this.state.yearlyGoals.overall_completion);
 	       }
 	       return (
-		   <div className="row" id="controller-pane">
+		   <div className="main">
+		       <div className="header">Duncan's Goals</div>
 		       <Years currentYear={this.state.year} currentYearCompletion={completion} handleYearChange={this.handleYearChange}/>
 		       <YearlyGoals yearlyGoals={this.state.yearlyGoals}/>
 		   </div>
@@ -198,7 +197,7 @@
        // to the Yearly Goals.
        ReactDOM.render(
            <Controller />,
-           document.getElementById('main')
+           document.getElementById('root')
        );
 
       </script>
