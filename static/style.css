@@ -104,6 +104,7 @@ body {
     text-align: center;
     padding: 5px;
     color: #6aa992;
+    cursor: pointer;
 }
 
 #yearSelector .year.selected {
