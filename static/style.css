@@ -76,10 +76,6 @@ body {
     min-width: 50%;
 }
 
-.goal:last-child {
-    max-width: 50%;
-}
-
 .goal-state {
     display: inline-block;
 }
